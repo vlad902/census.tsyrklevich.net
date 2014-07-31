@@ -11,8 +11,6 @@ configure :production do
   $production = true
 end
 
-require_relative 'data_models'
-
 DB = Sequel.connect(ENV['CLEARDB_DATABASE_URL'] || 'mysql://vlad@localhost/android_census',
                     :max_connections => 15)
                     #:logger => Logger.new('db.log'))
@@ -20,8 +18,9 @@ DB = Sequel.connect(ENV['CLEARDB_DATABASE_URL'] || 'mysql://vlad@localhost/andro
 DB.extension(:error_sql)
 DB.extension(:connection_validator)
 DB.pool.connection_validation_timeout = 30
-
 #Sequel::MySQL.default_collate = 'utf8_bin'
+
+require_relative 'data_models'
 
 def assert(&block)
   raise "Assertion error" unless yield
