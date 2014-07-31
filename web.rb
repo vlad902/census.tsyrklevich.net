@@ -11,6 +11,8 @@ configure :production do
   $production = true
 end
 
+require_relative 'data_models'
+
 DB = Sequel.connect(ENV['CLEARDB_DATABASE_URL'] || 'mysql://vlad@localhost/android_census',
                     :max_connections => 15)
                     #:logger => Logger.new('db.log'))
@@ -34,8 +36,6 @@ def check_production_password(request)
     raise "Incorrect password"
   end
 end
-
-require_relative 'data_models'
 
 get '/' do
   erb :index
