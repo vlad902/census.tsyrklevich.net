@@ -1,0 +1,16 @@
+<h1>Devices with feature <%= feature %></h1>
+<table class="table table-condensed table-striped table-bordered table-non-max-width">
+  <thead>
+    <tr>
+      <th>Device</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% devices.sort_by { |d| d[:name] }.each do |device| %> 
+      <tr>
+        <td><a href="/devices/<%= device[:id] %>"><%= device[:name] %></a></td>
+      </tr>
+    <% end %> 
+  </tbody>
+</table>
+

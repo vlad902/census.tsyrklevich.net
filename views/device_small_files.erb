@@ -1,0 +1,6 @@
+<h4>Files:</h4>
+<ul>
+  <% paths.sort.each do |path| %>
+    <li><a href="/devices/<%= id %>/small_files/<%= CGI::escape(path) %>"><%= path %></a></li>
+  <% end %>
+</ul>

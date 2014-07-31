@@ -1,0 +1,29 @@
+<%
+  columns = model.columns - [:id, :device_id]
+%>
+<h4><%= header %></h4>
+<table class="table table-condensed table-striped table-bordered table-non-max-width">
+  <thead>
+    <tr>
+      <% columns.each do |column| %>
+        <th><%= column %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% data.sort { |a, b| a[columns[0]] <=> b[columns[0]] }.each do |element| %>
+      <tr>
+        <% columns.each_with_index do |column, idx| %>
+          <% column_data = CGI::escapeHTML(model.display_value(column, element[column]))%>
+          <td>
+            <% if idx == 0 %>
+              <a href="/<%= model.table_name %>/<%= column_data %>"><%= column_data %></a></td>
+            <% else %>
+              <%= column_data %>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

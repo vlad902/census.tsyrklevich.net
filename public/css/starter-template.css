@@ -1,0 +1,18 @@
+body {
+  padding-top: 50px;
+}
+.view {
+  padding: 40px 15px;
+}
+[class*="col-"] {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: #eee;
+  background-color: rgba(86,61,124,.15);
+  border: 1px solid #ddd;
+  border: 1px solid rgba(86,61,124,.2);
+}
+.table-non-max-width {
+  max-width: none;
+  width: auto;
+}

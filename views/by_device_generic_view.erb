@@ -1,0 +1,34 @@
+<%
+  columns = model.columns - [:id, :device_id]
+
+  # Strip the first column since we're keeping it static
+  data = model.where(columns.shift => index).all
+
+  # Map device IDs to names for faster sorting/fewer queries
+  device_map = {}
+  Device.where(:id => data.map(&:device_id)).each { |device|
+    device_map[device[:id]] = device[:name]
+  }
+%>
+<h4><%= index %></h4>
+<table class="table table-condensed table-striped table-bordered table-non-max-width">
+  <thead>
+    <tr>
+      <th>Device</th>
+      <% columns.each do |column| %>
+        <th><%= column %></th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% data.sort_by { |d| device_map[d[:device_id]] }.each do |element| %>
+      <tr>
+        <td><a href="/devices/<%= element[:device_id] %>"><%= device_map[element[:device_id]] %></a></td>
+        <% columns.each do |column| %>
+          <% column_data = CGI::escapeHTML(model.display_value(column, element[column]))%>
+          <td><%= column_data %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

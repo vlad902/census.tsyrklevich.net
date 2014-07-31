@@ -1,0 +1,4 @@
+<% devices.sort_by { |d| d[:name].downcase }.each do |d| %>
+  <a href="/devices/<%= d[:id] %>"><%= d[:name] %></a>
+  <br />
+<% end %>
