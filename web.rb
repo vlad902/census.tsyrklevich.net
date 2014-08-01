@@ -261,7 +261,7 @@ def process_result(result)
           {
             :name => data["name"],
             :package_name => data["packageName"],
-            :protection_level => data["protection_level"].to_i,
+            :protection_level => data["protectionLevel"].to_i,
             :flags => data["flags"].to_i,
             :device_id => device[:id],
           }
