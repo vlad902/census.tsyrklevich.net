@@ -75,6 +75,36 @@ DB.create_table?(:permissions) do
 end
 class Permission < Sequel::Model
   many_to_one :device
+
+  def self.display_value(column, value)
+    case column
+    when :protection_level
+      level = []
+
+      level << 'development' if (value & 0x20) != 0
+      level << 'system' if (value & 0x10) != 0
+
+      case value & 0x0f
+        when 0; level << 'normal'
+        when 1; level << 'dangerous'
+        when 2; level << 'signature'
+        when 3; level << 'signatureOrSystem'
+        else level << "unknown base #{value & 0x0f}"
+      end
+
+      level.join('|')
+
+    when :flags
+      if value == 1
+        'costsMoney'
+      else
+        ''
+      end
+
+    else
+      super(column, value)
+    end
+  end
 end
 
 DB.create_table?(:content_providers) do
