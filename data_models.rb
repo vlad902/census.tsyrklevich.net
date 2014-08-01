@@ -143,6 +143,7 @@ DB.create_table?(:file_permissions) do
   Integer     :size, :null => false
   Integer     :uid, :null => false
   Integer     :gid, :null => false
+  String      :selinux_context
 end
 class FilePermission < Sequel::Model
   many_to_one :device

@@ -287,6 +287,7 @@ def process_result(result)
             :size => data['size'],
             :uid => data['uid'],
             :gid => data['gid'],
+            :selinux_context => data['selinuxContext'],
             :device_id => device[:id]
           }
         end
