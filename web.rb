@@ -5,6 +5,7 @@ require 'sequel'
 require 'logger'
 require 'zlib'
 require 'base64'
+require 'digest'
 
 configure :production do
   require 'newrelic_rpm'
@@ -320,6 +321,25 @@ end
 get '/process_results' do
   check_production_password(request)
   Thread.new {
+    # First things first, delete duplicate entries.
+    # { data_sha256_hash => result_id }
+    hashes = {}
+    DB[:results].all.each { |result|
+      hash = Digest::SHA256.digest(result[:data])
+
+      if hashes[hash]
+        if result[:processed]
+          DB[:results].where(:id => hashes[hash]).delete
+          hashes[hash] = result[:id]
+        else
+          DB[:results].where(:id => result[:id]).delete
+        end
+      else
+        hashes[hash] = result[:id]
+      end
+    }
+
+    # Now process unprocessed results
     DB[:results].where(:processed => false).each { |result|
       begin
         process_result(result)
