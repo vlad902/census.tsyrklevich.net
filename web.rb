@@ -27,12 +27,17 @@ def assert(&block)
   raise "Assertion error" unless yield
 end
 
+error 400..510 do
+  'Error!'
+end
+
 # In production we limit calls to results posting/reading/processing endpoints.
 def check_production_password(request)
   if $production &&
      (!request.env['HTTP_AUTHORIZATION'] || 
       request.env['HTTP_AUTHORIZATION'] != ENV['ACCESS_CONTROL_PASSWORD'])
 
+    status 403
     raise "Incorrect password"
   end
 end
@@ -46,10 +51,12 @@ get '/devices' do
 end
 
 get '/devices/:id' do |id|
+  return 404 if !Device[id]
   erb :device, :locals => { :device => Device[id] }
 end
 
 get '/devices/:id/system_properties' do |id|
+  return 404 if !Device[id]
   erb :device_generic_view, :locals => {
     :data => Device[id].system_properties,
     :header => "System Properties",
@@ -58,6 +65,7 @@ get '/devices/:id/system_properties' do |id|
 end
 
 get '/devices/:id/sysctls' do |id|
+  return 404 if !Device[id]
   erb :device_generic_view, :locals => {
     :data => Device[id].sysctls,
     :header => "Sysctls",
@@ -66,6 +74,7 @@ get '/devices/:id/sysctls' do |id|
 end
 
 get '/devices/:id/features' do |id|
+  return 404 if !Device[id]
   erb :device_generic_view, :locals => {
     :data => Device[id].features,
     :header => "Features",
@@ -74,6 +83,7 @@ get '/devices/:id/features' do |id|
 end
 
 get '/devices/:id/shared_libraries' do |id|
+  return 404 if !Device[id]
   erb :device_generic_view, :locals => {
     :data => Device[id].shared_libraries,
     :header => "Shared Libraries",
@@ -82,6 +92,7 @@ get '/devices/:id/shared_libraries' do |id|
 end
 
 get '/devices/:id/permissions' do |id|
+  return 404 if !Device[id]
   erb :device_generic_view, :locals => {
     :data => Device[id].permissions,
     :header => "Permissions",
@@ -90,6 +101,7 @@ get '/devices/:id/permissions' do |id|
 end
 
 get '/devices/:id/providers' do |id|
+  return 404 if !Device[id]
   erb :device_generic_view, :locals => {
     :data => Device[id].content_providers,
     :header => "Content Providers",
@@ -98,6 +110,7 @@ get '/devices/:id/providers' do |id|
 end
 
 get '/devices/:id/small_files' do |id|
+  return 404 if !Device[id]
   erb :device_small_files, :locals => {
     :id => id,
     :paths => SmallFile.where(:device_id => id).select_map(:path)
@@ -105,6 +118,7 @@ get '/devices/:id/small_files' do |id|
 end
 
 get '/devices/:id/small_files/*' do |id, path|
+  return 404 if !Device[id]
   file = SmallFile.where(:device_id => id, :path => '/' + path).all.first
 
   content_type 'text/plain'
@@ -112,6 +126,7 @@ get '/devices/:id/small_files/*' do |id, path|
 end
 
 get '/devices/:id/file_permissions' do |id|
+  return 404 if !Device[id]
   erb :device_generic_view, :locals => {
     :data => Device[id].file_permissions,
     :header => "File Permissions",
