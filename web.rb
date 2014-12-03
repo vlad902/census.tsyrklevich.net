@@ -27,6 +27,12 @@ def assert(&block)
   raise "Assertion error" unless yield
 end
 
+# http://stackoverflow.com/questions/1765368/how-to-count-duplicates-in-ruby-arrays
+def dup_hash(ary)
+  ary.inject(Hash.new(0)) { |h,e| h[e] += 1; h }.select { 
+    |k,v| v > 1 }.inject({}) { |r, e| r[e.first] = e.last; r }
+end
+
 error 400..510 do
   'Error!'
 end
@@ -181,6 +187,33 @@ get '/shared_libraries/:feature' do |feature|
     :feature => feature,
     :devices => SharedLibrary.where(:name => feature).all[0].devices
   }
+end
+
+get '/piechart/versions.json' do
+  versions = DB[:system_properties].where(:property => 'ro.build.version.release').select_map(:value)
+
+  data = dup_hash(versions).map do |version, count|
+    {
+      'label' => version,
+      'value' => count
+    }
+  end
+
+  JSON.generate(data)
+end
+
+get '/piechart/manufacturers.json' do
+  manufacturers = DB[:system_properties].where(:property => 'ro.product.manufacturer').select_map(:value)
+  manufacturers.map!(&:upcase)
+
+  data = dup_hash(manufacturers).map do |version, count|
+    {
+      'label' => version,
+      'value' => count
+    }
+  end
+
+  JSON.generate(data)
 end
 
 post '/results/new' do
