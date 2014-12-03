@@ -223,7 +223,26 @@ def process_result(result)
     device_name.gsub!(/^unknown lenovo/i, 'Lenovo')
     device_name.gsub!('_one_touch_', ' ONE TOUCH ')
 
-    device = Device.create(:name => device_name)
+    if json['system_properties']
+      build_description = json['system_properties']['ro.build.description']
+    else
+      build_description = device_name
+    end
+
+    # Don't create a new device entry if we don't need to, re-use the same one but delete old
+    #  entries in other tables
+    dsearch = Device.where(:name => device_name, :build_description => build_description)
+    if dsearch.count == 0
+      device = Device.create(:name => device_name, :build_description => build_description)
+    else
+      device = dsearch.all[0]
+
+      [ :system_properties, :sysctls, :devices_features, :devices_shared_libraries,
+        :permissions, :small_files, :file_permissions, :content_providers ].each { |table_name|
+
+        DB[table_name].where(:device_id => device[:id]).delete
+      }
+    end
 
     if json["system_properties"]
       DB[:system_properties].multi_insert(

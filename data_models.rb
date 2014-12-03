@@ -15,6 +15,7 @@ end
 DB.create_table?(:devices) do
   primary_key :id
   String      :name, :null => false
+  String      :build_description, :null => false, :unique => true
 end
 class Device < Sequel::Model
   one_to_many :system_properties
