@@ -127,6 +127,7 @@ get '/devices/:id/small_files/*' do |id, path|
   return 404 if !Device[id]
   file = SmallFile.where(:device_id => id, :path => '/' + path).all.first
 
+  return 404 if !file
   content_type 'text/plain'
   file[:contents]
 end
