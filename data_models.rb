@@ -129,7 +129,7 @@ DB.create_table?(:small_files) do
   primary_key :id
   foreign_key :device_id, :devices
   String      :path, :null => false
-  blob        :contents, :null => false
+  blob        :contents, :null => false, :size => 10_000_000
 end
 class SmallFile < Sequel::Model
   many_to_one :device
