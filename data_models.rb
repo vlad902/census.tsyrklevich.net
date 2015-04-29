@@ -6,7 +6,7 @@ end
 
 DB.create_table?(:results) do
   primary_key :id
-  blob        :data, :null => false, :size => 1_000_000 # LZ4-compressed JSON blobs
+  blob        :data, :null => false, :size => 100_000_000 # LZ4-compressed JSON blobs
   boolean     :processed, :null => false
 end
 class Result < Sequel::Model
