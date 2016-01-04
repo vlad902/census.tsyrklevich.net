@@ -79,6 +79,15 @@ get '/devices/:id/sysctls' do |id|
   }
 end
 
+get '/devices/:id/environment_variables' do |id|
+  return 404 if !Device[id]
+  erb :device_generic_view, :locals => {
+    :data => Device[id].environment_variables,
+    :header => "Environment Variables",
+    :model => EnvironmentVariable
+  }
+end
+
 get '/devices/:id/features' do |id|
   return 404 if !Device[id]
   erb :device_generic_view, :locals => {
@@ -152,6 +161,13 @@ get '/system_properties/:property' do |property|
   erb :by_device_generic_view, :locals => {
     :model => SystemProperty,
     :index => property
+  }
+end
+
+get '/environment_variables/:variable' do |variable|
+  erb :by_device_generic_view, :locals => {
+    :model => EnvironmentVariable,
+    :index => variable
   }
 end
 
@@ -272,7 +288,8 @@ def process_result(result)
       device = dsearch.all[0]
 
       [ :system_properties, :sysctls, :devices_features, :devices_shared_libraries,
-        :permissions, :small_files, :file_permissions, :content_providers ].each { |table_name|
+        :permissions, :small_files, :file_permissions, :content_providers,
+        :environment_variables ].each { |table_name|
 
         DB[table_name].where(:device_id => device[:id]).delete
       }
@@ -378,6 +395,14 @@ def process_result(result)
             :flags => data["flags"],
             :device_id => device[:id]
           }
+        end
+      )
+    end
+
+    if json["environment_variables"]
+      DB[:environment_variables].multi_insert(
+        json["environment_variables"].map do |k,v|
+          { :variable => k, :value => v, :device_id => device[:id] } 
         end
       )
     end

@@ -20,6 +20,7 @@ end
 class Device < Sequel::Model
   one_to_many :system_properties
   one_to_many :sysctls
+  one_to_many :environment_variables
   many_to_many :features
   many_to_many :shared_libraries
   one_to_many :permissions
@@ -215,4 +216,14 @@ class FilePermission < Sequel::Model
       super(column, value)
     end
   end
+end
+
+DB.create_table?(:environment_variables) do
+  primary_key :id
+  foreign_key :device_id, :devices
+  String      :variable, :null => false
+  String      :value, :null => false
+end
+class EnvironmentVariable < Sequel::Model
+  many_to_one :device
 end
