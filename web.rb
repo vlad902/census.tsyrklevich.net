@@ -273,7 +273,7 @@ def process_result(result)
     device_name.gsub!(/^unknown lenovo/i, 'Lenovo')
     device_name.gsub!('_one_touch_', ' ONE TOUCH ')
 
-    if json['system_properties']
+    if json['system_properties'] && json['system_properties']['ro.build.description']
       build_description = json['system_properties']['ro.build.description']
     else
       build_description = device_name
@@ -437,6 +437,7 @@ get '/process_results' do
       begin
         process_result(result)
       rescue => e
+        $stderr.puts e.inspect
         $stderr.puts e.backtrace
       end
     }

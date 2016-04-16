@@ -33,7 +33,7 @@ DB.create_table?(:system_properties) do
   primary_key :id
   foreign_key :device_id, :devices
   String      :property, :null => false
-  String      :value, :null => false
+  blob        :value, :null => false
 end
 class SystemProperty < Sequel::Model
   many_to_one :device
@@ -43,7 +43,7 @@ DB.create_table?(:sysctls) do
   primary_key :id
   foreign_key :device_id, :devices
   String      :property, :null => false
-  String      :value, :null => false
+  blob        :value, :null => false
 end
 class Sysctl < Sequel::Model
   many_to_one :device
@@ -222,7 +222,7 @@ DB.create_table?(:environment_variables) do
   primary_key :id
   foreign_key :device_id, :devices
   String      :variable, :null => false
-  String      :value, :null => false
+  blob        :value, :null => false
 end
 class EnvironmentVariable < Sequel::Model
   many_to_one :device
