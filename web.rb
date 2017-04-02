@@ -12,7 +12,7 @@ configure :production do
   $production = true
 end
 
-DB = Sequel.connect(ENV['CLEARDB_DATABASE_URL'] || 'mysql://vlad@localhost/android_census',
+DB = Sequel.connect(ENV['MYSQL_DB_URL'] || 'mysql://root@localhost/android_census',
                     :max_connections => 15)
                     #:logger => Logger.new('db.log'))
 
