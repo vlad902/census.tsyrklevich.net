@@ -129,7 +129,7 @@ end
 DB.create_table?(:small_files) do
   primary_key :id
   foreign_key :device_id, :devices
-  String      :path, :null => false
+  String      :path, :null => false, :index => true
   blob        :contents, :null => false, :size => 10_000_000
 end
 class SmallFile < Sequel::Model
@@ -139,7 +139,7 @@ end
 DB.create_table?(:file_permissions) do
   primary_key :id
   foreign_key :device_id, :devices
-  String      :path, :null => false
+  String      :path, :null => false, :index => true
   String      :link_path
   Integer     :mode, :null => false
   Integer     :size, :null => false
