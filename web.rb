@@ -235,7 +235,7 @@ end
 
 post '/results/new' do
   check_production_password(request)
-  Result.create(:data => request.body.read)
+  Result.create(:data => request.body.read, :processed => false)
   ''
 end
 
