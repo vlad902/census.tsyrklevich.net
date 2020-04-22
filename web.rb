@@ -13,7 +13,8 @@ configure :production do
 end
 
 DB = Sequel.connect(ENV['MYSQL_DB_URL'] || 'mysql2://root@localhost/android_census',
-                    :max_connections => 15)
+                    :max_connections => 15,
+                    :ssl_mode => :required)
                     #:logger => Logger.new('db.log'))
 
 DB.extension(:error_sql)
