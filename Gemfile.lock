@@ -6,7 +6,6 @@ GEM
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     mysql2 (0.5.3)
-    newrelic_rpm (6.10.0.364)
     rack (2.2.3)
     rack-protection (2.0.8.1)
       rack
@@ -29,7 +28,6 @@ PLATFORMS
 DEPENDENCIES
   foreman
   mysql2
-  newrelic_rpm
   sequel
   sinatra
   unicorn

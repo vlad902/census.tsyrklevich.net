@@ -8,7 +8,6 @@ require 'base64'
 require 'digest'
 
 configure :production do
-  require 'newrelic_rpm'
   $production = true
 end
 
