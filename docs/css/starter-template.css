@@ -1,0 +1,13 @@
+body {
+  padding-top: 50px;
+}
+.view {
+  padding: 10px 15px;
+}
+.homepage {
+  line-height: 1.7
+}
+.table-non-max-width {
+  max-width: none;
+  width: auto;
+}
