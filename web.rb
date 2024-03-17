@@ -312,7 +312,7 @@ def process_result(result)
       new_features = all_features - DB[:features].distinct(:name).select_map(:name)
       DB[:features].multi_insert(new_features.map { |f| {:name => f} })
 
-      feature_ids = DB[:features].where('name in ?', json["features"]).map { |f| f[:id] }
+      feature_ids = DB[:features].where(name: json["features"]).map { |f| f[:id] }
       DB[:devices_features].multi_insert(
         feature_ids.map do |id|
           { :device_id => device[:id], :feature_id => id }
@@ -326,7 +326,7 @@ def process_result(result)
       new_libraries = json["system_shared_libraries"] - DB[:shared_libraries].distinct(:name).select_map(:name)
       DB[:shared_libraries].multi_insert(new_libraries.map { |l| {:name => l} })
 
-      library_ids = DB[:shared_libraries].where('name in ?', json["system_shared_libraries"]).map { |l| l[:id] }
+      library_ids = DB[:shared_libraries].where(name: json["system_shared_libraries"]).map { |l| l[:id] }
       DB[:devices_shared_libraries].multi_insert(
         library_ids.map do |id|
           { :device_id => device[:id], :shared_library_id => id }
