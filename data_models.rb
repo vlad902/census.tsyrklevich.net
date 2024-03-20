@@ -112,7 +112,7 @@ end
 DB.create_table?(:content_providers) do
   primary_key :id
   foreign_key :device_id, :devices
-  String      :authority, :null => false, :length => 512
+  mediumtext  :authority, :null => false
   Integer     :init_order, :null => false
   boolean     :multiprocess, :null => false
   boolean     :grant_uri_permissions, :null => false
